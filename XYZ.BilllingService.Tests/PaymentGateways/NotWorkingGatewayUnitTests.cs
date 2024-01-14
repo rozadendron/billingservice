@@ -11,8 +11,6 @@ namespace XYZ.BilllingService.Tests.PaymentGateways
         {
             IPaymentGateway paymentGatewayService = new AlwaysNotWorkingGateway();
             Assert.ThrowsAnyAsync<PaymentNotProcessedException>(async () => paymentGatewayService.ProcessPayment(null));
-
         }     
-
     }
 }

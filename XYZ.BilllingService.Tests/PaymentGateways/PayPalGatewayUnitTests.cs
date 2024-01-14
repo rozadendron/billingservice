@@ -41,12 +41,10 @@ namespace XYZ.BilllingService.Tests.PaymentGateways
             });
 
             Assert.NotNull(testResult);
-            Assert.Equal(testResult.OrderNumber, "1");
-            Assert.Equal(testResult.UserId, "1");
-            Assert.Equal(testResult.Description, "test");
+            Assert.Equal("1", testResult.OrderNumber);
+            Assert.Equal("1", testResult.UserId);
+            Assert.Equal("test", testResult.Description);
             Assert.NotNull(testResult.PaymentDate);
         }
-
-
     }
 }

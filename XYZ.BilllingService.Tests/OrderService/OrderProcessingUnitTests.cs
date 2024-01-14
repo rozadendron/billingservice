@@ -1,20 +1,10 @@
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using XYZ.Billing.BusinessLogic.Errors;
-using XYZ.BillingService.Orders.Interfaces;
 using XYZ.BillingService.Orders.Services;
-using XYZ.BillingService.Payments.Interfaces;
-using XYZ.BillingService.Payments.PaymentGateways;
 
 namespace XYZ.BilllingService.Tests.PaymentGateways
 {
     public class OrderProcessingUnitTests
-    {
-        public OrderProcessingUnitTests()
-        {
-
-
-        }
-
+    {   
         [Fact]
         public async void OrderProcessNullParam()
         {
@@ -40,14 +30,13 @@ namespace XYZ.BilllingService.Tests.PaymentGateways
             var reciept = orderProcessingService.ProcessOrder(order);
             Assert.NotNull(reciept);
             Assert.NotNull(reciept.Result);
-            Assert.Equal(reciept.Result.OrderNumber, "1");
-            Assert.Equal(reciept.Result.UserId, "1");
-            Assert.Equal(reciept.Result.Description, "test");
-            Assert.NotNull(reciept.Result.PaymentDate);
+            Assert.Equal("1", reciept.Result.OrderNumber);
+            Assert.Equal("1", reciept.Result.UserId);
+            Assert.Equal("test", reciept.Result.Description);          
         }
 
         [Fact]
-        public async void OrderProcessPayPalHappyPassResult()
+        public void OrderProcessPayPalHappyPassResult()
         {
             OrderProcessingService orderProcessingService = new OrderProcessingService();
             var order = new BillingService.Payments.Models.Order()
@@ -63,10 +52,9 @@ namespace XYZ.BilllingService.Tests.PaymentGateways
             var reciept = orderProcessingService.ProcessOrder(order);
             Assert.NotNull(reciept);
             Assert.NotNull(reciept.Result);
-            Assert.Equal(reciept.Result.OrderNumber, "1");
-            Assert.Equal(reciept.Result.UserId, "1");
-            Assert.Equal(reciept.Result.Description, "test");
-            Assert.NotNull(reciept.Result.PaymentDate);
+            Assert.Equal("1", reciept.Result.OrderNumber);
+            Assert.Equal("1", reciept.Result.UserId);
+            Assert.Equal( "test", reciept.Result.Description);           
         }
 
         [Fact]
@@ -82,36 +70,25 @@ namespace XYZ.BilllingService.Tests.PaymentGateways
                 Description = "test"
             };
 
-
-            var reciept = orderProcessingService.ProcessOrder(order);
-            Assert.NotNull(reciept);
-            Assert.NotNull(reciept.Result);
-            Assert.Equal(reciept.Result.OrderNumber, "1");
-            Assert.Equal(reciept.Result.UserId, "1");
-            Assert.Equal(reciept.Result.Description, "test");
-            Assert.NotNull(reciept.Result.PaymentDate);
+            Task result() => orderProcessingService.ProcessOrder(order);
+            await Assert.ThrowsAsync<PaymentNotProcessedException>(result);
         }
 
-        //[Fact]
-        //public async void ProcessPaymentSucessResult()
-        //{
-        //    IPaymentGateway paymentGatewayService = new PayPalGateway();
-        //    var testResult = await paymentGatewayService.ProcessPayment(new BillingService.Payments.Models.Order()
-        //    {
-        //        OrderNumber = "1",
-        //        UserId = "1",
-        //        PaymentGatewayId = 1,
-        //        Amount = 1,
-        //        Description = "test"
-        //    });
+        [Fact]
+        public async void OrderProcessWrongAmmountResult()
+        {
+            OrderProcessingService orderProcessingService = new OrderProcessingService();
+            var order = new BillingService.Payments.Models.Order()
+            {
+                OrderNumber = "1",
+                UserId = "1",
+                PaymentGatewayId = 3,
+                Amount = 0,
+                Description = "test"
+            };
 
-        //    Assert.NotNull(testResult);
-        //    Assert.Equal(testResult.OrderNumber, "1");
-        //    Assert.Equal(testResult.UserId, "1");
-        //    Assert.Equal(testResult.Description, "test");
-        //    Assert.NotNull(testResult.PaymentDate);
-        //}
-
-
+            Task result() => orderProcessingService.ProcessOrder(order);
+            await Assert.ThrowsAsync<PaymentNotProcessedException>(result);
+        }
     }
 }
