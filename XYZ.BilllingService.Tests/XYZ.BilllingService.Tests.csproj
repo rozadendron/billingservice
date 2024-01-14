@@ -23,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OrderApi.BusinessLogic\XYZ.BillingService.Payments.csproj" />
-    <ProjectReference Include="..\XYZ.Orders.BusinessLogic\XYZ.BillingService.Orders.csproj" />
+    <ProjectReference Include="..\XYZ.BillingService.Orders\XYZ.BillingService.Orders.csproj" />
+    <ProjectReference Include="..\XYZ.BillingService.Payments\XYZ.BillingService.Payments.csproj" />
   </ItemGroup>
 
 </Project>
