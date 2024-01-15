@@ -1,32 +1,29 @@
-﻿using XYZ.Billing.BusinessLogic.Errors;
-using XYZ.BillingService.Payments.Interfaces;
+﻿using XYZ.BillingService.Payments.Interfaces;
 using XYZ.BillingService.Payments.Models;
 
 namespace XYZ.BillingService.Payments.PaymentGateways
 {
     public class ApplePayGateway : IPaymentGateway
     {
-        public Task<Receipt> ProcessPayment(Order orderToProcess)
+        public Task<PaymentResult> ProcessPayment(PaymentRequest paymentRequest)
         {
-            if (orderToProcess == null)
+            if (paymentRequest == null)
             {
-                throw new ArgumentNullException(nameof(orderToProcess));
+                throw new ArgumentNullException(nameof(paymentRequest));
             }
 
-            if (orderToProcess.Amount==0)
+            var result = new PaymentResult() { PaymentId = Guid.NewGuid() };
+
+            if (paymentRequest.PaymentAmount == 0)
             {
-                throw new PaymentNotProcessedException();
+                result.PaymentCode = PaymentStatus.Failed;
+            }
+            else
+            {
+                result.PaymentCode = PaymentStatus.Sucessfull;
             }
 
-            return Task.FromResult<Receipt>(new Receipt()
-            {
-                OrderNumber = orderToProcess.OrderNumber,
-                Amount = orderToProcess.Amount,
-                Id = new Guid(),
-                PaymentDate = DateTime.Now,
-                UserId = orderToProcess.UserId,
-                Description = orderToProcess.Description,
-            });
-        }      
+            return Task.FromResult(result);
+        }
     }
 }

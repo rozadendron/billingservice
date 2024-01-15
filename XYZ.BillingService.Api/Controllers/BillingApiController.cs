@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using XYZ.Billing.BusinessLogic.Errors;
+using XYZ.BillingService.Orders.Errors;
 using XYZ.BillingService.Orders.Interfaces;
 using XYZ.BillingService.Payments.Models;
 
@@ -14,11 +14,11 @@ namespace OrderApi.Controllers
         private const string ErrorOccuredMessage = "Error occuried during Order processing. OrderNumber:";
         private const string RecievedOrderMessage = "Recieved order, starting processing. OrderNumber:";
 
-        [HttpPost]
+        [HttpPost("v1/orders/process")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<IActionResult> Get(Order order)
+        public async Task<IActionResult> Process(Order order)
         {
             if (order == null)
             {

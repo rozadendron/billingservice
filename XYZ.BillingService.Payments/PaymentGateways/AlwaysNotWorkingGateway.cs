@@ -1,14 +1,24 @@
-﻿using XYZ.Billing.BusinessLogic.Errors;
-using XYZ.BillingService.Payments.Interfaces;
+﻿using XYZ.BillingService.Payments.Interfaces;
 using XYZ.BillingService.Payments.Models;
 
 namespace XYZ.BillingService.Payments.PaymentGateways
 {
     public class AlwaysNotWorkingGateway : IPaymentGateway
     {
-        public async Task<Receipt> ProcessPayment(Order orderToProcess)
+        public Task<PaymentResult> ProcessPayment(PaymentRequest paymentRequest)
         {
-            throw new PaymentNotProcessedException();
-        }      
+            if (paymentRequest == null)
+            {
+                throw new ArgumentNullException(nameof(paymentRequest));
+            }
+
+            var result = new PaymentResult
+            {
+                PaymentId = new Guid(),
+                PaymentCode = PaymentStatus.Failed
+            };
+
+            return Task.FromResult(result);
+        }
     }
 }

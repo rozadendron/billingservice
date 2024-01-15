@@ -4,6 +4,6 @@ namespace XYZ.BillingService.Payments.Interfaces
 {
     public interface IPaymentGateway
     {
-        public Task<Receipt> ProcessPayment(Order orderToProcess);
+        public Task<PaymentResult> ProcessPayment(PaymentRequest paymentToProcess);        
     }
 }

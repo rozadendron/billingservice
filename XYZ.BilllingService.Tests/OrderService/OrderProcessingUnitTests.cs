@@ -1,4 +1,4 @@
-using XYZ.Billing.BusinessLogic.Errors;
+using XYZ.BillingService.Orders.Errors;
 using XYZ.BillingService.Orders.Services;
 
 namespace XYZ.BilllingService.Tests.PaymentGateways
@@ -14,7 +14,7 @@ namespace XYZ.BilllingService.Tests.PaymentGateways
         }
 
         [Fact]
-        public async void OrderProcessApplePayHappyPassResult()
+        public void OrderProcessApplePayHappyPassResult()
         {
             OrderProcessingService orderProcessingService = new OrderProcessingService();
             var order = new BillingService.Payments.Models.Order()
@@ -23,13 +23,16 @@ namespace XYZ.BilllingService.Tests.PaymentGateways
                 UserId = "1",
                 PaymentGatewayId = 1,
                 Amount = 1,
-                Description = "test"
+                Description = "test",                 
             };
 
-
             var reciept = orderProcessingService.ProcessOrder(order);
+            
             Assert.NotNull(reciept);
             Assert.NotNull(reciept.Result);
+            Assert.NotEqual(Guid.Empty, reciept.Result.PaymentId);
+            Assert.NotEqual(Guid.Empty, reciept.Result.ReceiptId);
+            
             Assert.Equal("1", reciept.Result.OrderNumber);
             Assert.Equal("1", reciept.Result.UserId);
             Assert.Equal("test", reciept.Result.Description);          

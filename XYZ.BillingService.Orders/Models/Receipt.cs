@@ -2,7 +2,7 @@
 {
     public class Receipt : Order
     {
-        public Guid Id { get; set; }
-        public DateTime PaymentDate { get; set; }
+        public Guid ReceiptId { get; set; }
+        public Guid PaymentId { get; set; }       
     }
 }
